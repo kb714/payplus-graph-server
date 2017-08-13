@@ -12,8 +12,8 @@ Types::QueryType = GraphQL::ObjectType.define do
 
   field :shop, !types[Types::ShopType] do
     argument :id, types.ID
-    resolve -> (obj, args, ctx) {
-      Shop.where(id: args['id'])
-    }
+    resolve -> (obj, args, ctx) do
+      Shop.find_by(id: args['id'])
+    end
   end
 end
