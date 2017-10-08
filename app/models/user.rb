@@ -9,4 +9,8 @@ class User < ActiveRecord::Base
   def create_api_key
     self.api_key = SecureRandom.urlsafe_base64 + SecureRandom.urlsafe_base64
   end
+
+  def as_json(options={})
+    super(options).merge({api_key: self.api_key})
+  end
 end
