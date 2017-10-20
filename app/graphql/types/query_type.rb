@@ -5,14 +5,14 @@ Types::QueryType = GraphQL::ObjectType.define do
 
   field :shops, !types[Types::ShopType] do
     # resolve would be called in order to fetch data for that field
-    resolve ->(_obj, _args, _ctx) { Shop.all }
+    resolve ->(_obj, _args, ctx) { ctx[:current_user].shops.all }
   end
 
   field :shop, Types::ShopType do
     argument :id, types.ID
 
-    resolve lambda { |_obj, args, _ctx|
-      Shop.find_by(id: args['id'])
+    resolve lambda { |_obj, args, ctx|
+      ctx[:current_user].shops.find_by_id(id: args['id'])
     }
   end
 end
