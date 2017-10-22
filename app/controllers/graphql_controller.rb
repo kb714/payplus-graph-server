@@ -6,14 +6,23 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     # Query context goes here, for example:
-    context = {current_user: User.find_by_api_key(request.headers['Authorization'])}
-    result = PayplusGraphServerSchema.execute(
-      query,
-      variables: variables,
-      context: context,
-      operation_name: operation_name
-    )
-    render json: result
+    context = {
+      current_user: User.find_by_api_key(
+        request.headers['Authorization']
+      )
+    }
+    if context[:current_user]
+      result = PayplusGraphServerSchema.execute(
+        query,
+        variables: variables,
+        context: context,
+        operation_name: operation_name
+      )
+      render json: result
+    else
+      render json: { errors: [{ message: 'You need provide a valid API key' }] },
+             status: :bad_request
+    end
   end
 
   private

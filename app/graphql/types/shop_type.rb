@@ -8,4 +8,5 @@ Types::ShopType = GraphQL::ObjectType.define do
   field :name, !types.String
   field :description, !types.String
   field :url, !types.String
+  field :user_id, !types.ID
 end

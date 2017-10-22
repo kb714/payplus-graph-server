@@ -11,14 +11,14 @@ class Resolvers::CreateShop < GraphQL::Function
   # _obj - is parent object, which in this case is nil
   # args - are the arguments passed
   # _ctx - is the GraphQL context (which would be discussed later)
-  def call(_obj, args, _ctx)
-    Shop.create!(
+  def call(_obj, args, ctx)
+    ctx[:current_user].shops.create!(
       name: args[:name],
       description: args[:description],
       url: args[:url]
     )
   rescue ActiveRecord::RecordInvalid => e
     # this would catch all validation errors and translate them to GraphQL::ExecutionError
-    GraphQL::ExecutionError.new("Invalid input: #{e.record.errors.full_messages.join(', ')}")
+    GraphQL::ExecutionError.new(e.record.errors.to_json)
   end
 end
