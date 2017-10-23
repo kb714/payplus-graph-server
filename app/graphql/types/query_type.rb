@@ -12,7 +12,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     argument :id, types.ID
 
     resolve lambda { |_obj, args, ctx|
-      ctx[:current_user].shops.find_by_id(id: args['id'])
+      ctx[:current_user].shops.find_by_id(args['id'])
     }
   end
 end

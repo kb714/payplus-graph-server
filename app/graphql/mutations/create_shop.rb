@@ -1,4 +1,4 @@
-class Resolvers::CreateShop < GraphQL::Function
+class Mutations::CreateShop < GraphQL::Function
   # arguments passed as "args"
   argument :name, !types.String
   argument :description, !types.String
