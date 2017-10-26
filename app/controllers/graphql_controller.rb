@@ -2,22 +2,24 @@ class GraphqlController < ApplicationController
   # before_action :authenticate_user!
 
   def execute
-    variables = ensure_hash(params[:variables])
-    query = params[:query]
-    operation_name = params[:operationName]
-    # Query context goes here, for example:
     context = {
       current_user: User.find_by_api_key(
         request.headers['Authorization']
       )
     }
     if context[:current_user]
-      result = PayplusGraphServerSchema.execute(
-        query,
-        variables: variables,
-        context: context,
-        operation_name: operation_name
-      )
+      if params[:operations].present?
+        operations = ensure_hash(params[:operations])
+        variables = {
+            "input" => operations[:variables].
+                merge({"file" => params["variables.file"]})
+        }
+        query     = operations[:query]
+      else
+        variables = ensure_hash(params[:variables])
+        query     = params[:query]
+      end
+      result = PayplusGraphServerSchema.execute(query, variables: variables, context: context)
       render json: result
     else
       render json: { errors: [{ message: 'You need provide a valid API key' }] },
