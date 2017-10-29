@@ -1,6 +1,6 @@
 module Types
   FileType = GraphQL::ScalarType.define do
-    name "File"
+    name
     description "ActionDispatch::Http::UploadedFile"
 
     coerce_input ->(action_dispatch_uploaded_file, ctx) {

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Resolvers::CreateShopTest < ActiveSupport::TestCase
   def perform(args = {})
-    Resolvers::CreateShop.new.call(nil, args, {})
+    Mutations::CreateShop.new.call(nil, args, {current_user: User})
   end
 
   test 'creating new shop' do
