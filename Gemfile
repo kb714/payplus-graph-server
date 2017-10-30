@@ -57,6 +57,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # GraphQL
 gem 'graphql'
 gem 'graphiql-rails', group: :development
+# carierwave
+gem 'carrierwave'
+gem 'carrierwave-base64'
 
 # Devise for sessions manage
 gem 'omniauth'
