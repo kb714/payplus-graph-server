@@ -15,5 +15,9 @@ module PayplusGraphServer
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.time_zone = "America/Santiago"
+
+    # Graphql
+    config.autoload_paths << Rails.root.join('app/graphql/mutations')
+    config.autoload_paths << Rails.root.join('app/graphql/types')
   end
 end

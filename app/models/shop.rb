@@ -1,6 +1,6 @@
 class Shop < ApplicationRecord
-  belongs_to :user, optional: true
   mount_base64_uploader :image, ShopImageUploader
+  belongs_to :user
   # validations
   validates :name, presence: true, exclusion: { in: %w(super-avance seguridad configuracion),
                                                  message: "El nombre %{value} no se puede utilizar." }

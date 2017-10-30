@@ -12,12 +12,26 @@ class GraphqlController < ApplicationController
         )
     }
     if context[:current_user]
-      result = PayplusGraphServerSchema.execute(
-          query,
-          variables: variables,
-          context: context,
-          operation_name: operation_name
-      )
+      # result = PAYPLUS_GRAPH_SERVER_SCHEMA.execute(
+      #     query,
+      #     variables: variables,
+      #     context: context,
+      #     operation_name: operation_name
+      # )
+      # render json: result
+      if params[:operations].present?
+        # この部分で、必要となる query と variables を設定する
+        operations = ensure_hash(params[:operations])
+        variables = {
+            "input" => operations[:variables].
+                merge({"file" => params["variables.file"]})
+        }
+        query     = operations[:query]
+      else
+        variables = ensure_hash(params[:variables])
+        query     = params[:query]
+      end
+      result = PAYPLUS_GRAPH_SERVER_SCHEMA.execute(query, variables: variables, context: context)
       render json: result
     else
       render json: { errors: [{ message: 'You need provide a valid API key' }] },

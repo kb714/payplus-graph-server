@@ -1,14 +1,17 @@
-Types::QueryType = GraphQL::ObjectType.define do
+QUERY_TYPE = GraphQL::ObjectType.define do
   name 'Query'
-  # Add root-level fields here.
-  # They will be entry points for queries on your schema.
+  description 'The query root of this schema'
 
-  field :shops, !types[Types::ShopType] do
+
+  field :shops do
+    type !types[SHOP_TYPE]
+    description 'Get all Shops'
     # resolve would be called in order to fetch data for that field
     resolve ->(_obj, _args, ctx) { ctx[:current_user].shops.all }
   end
 
-  field :shop, Types::ShopType do
+  field :shop do
+    type SHOP_TYPE
     argument :id, types.ID
 
     resolve lambda { |_obj, args, ctx|
