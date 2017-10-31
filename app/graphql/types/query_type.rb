@@ -12,8 +12,8 @@ QUERY_TYPE = GraphQL::ObjectType.define do
 
   field :shop do
     type SHOP_TYPE
-    argument :id, types.ID
-
+    argument :id, !types.ID
+    description 'Root object to get viewer related collections'
     resolve lambda { |_obj, args, ctx|
       ctx[:current_user].shops.find_by_id(args['id'])
     }

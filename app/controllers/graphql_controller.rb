@@ -31,6 +31,7 @@ class GraphqlController < ApplicationController
         variables = ensure_hash(params[:variables])
         query     = params[:query]
       end
+      puts "VARIABLES: #{variables}"
       result = PAYPLUS_GRAPH_SERVER_SCHEMA.execute(query, variables: variables, context: context)
       render json: result
     else
