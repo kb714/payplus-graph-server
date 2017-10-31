@@ -22,8 +22,9 @@ class GraphqlController < ApplicationController
       if params[:operations].present?
         # この部分で、必要となる query と variables を設定する
         operations = ensure_hash(params[:operations])
+        puts "OPERATIONS #{operations["variables"]}"
         variables = {
-            "input" => operations[:variables].
+            "input" => operations["variables"].
                 merge({"file" => params["variables.file"]})
         }
         query     = operations[:query]
