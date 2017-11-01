@@ -1,33 +1,45 @@
 MUTATION_TYPE = GraphQL::ObjectType.define do
   name 'Mutation'
 
+  # Create
   field :createShop, SHOP_TYPE do
     description 'Create new shop'
 
-    argument :input, SHOP_INPUT_TYPE
+    argument :name, !types.String do
+      description 'Name of the post.'
+    end
 
-    resolve -> (_object, args, ctx) {
+    argument :description, !types.String do
+      description 'Description of the post.'
+    end
+
+    argument :url, !types.String do
+      description 'URL of the post.'
+    end
+
+    argument :image, types.String
+
+    resolve ->(_object, args, ctx) {
       begin
-        data = args[:input]
         shop = ctx[:current_user].shops.create!(
-            name: data[:name],
-            description: data[:description],
-            url: data[:url]
+          name: args[:name],
+          description: args[:description],
+          url: args[:url],
+          image: args[:image]
         )
-        # on success, return the post:
         shop
       rescue ActiveRecord::RecordInvalid => e
-        # on error, return an error:
         GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
     }
 
   end
 
+  # Update
   field :updateShop, SHOP_TYPE do
     description 'Update existing shop'
 
-    argument :shopId, types.ID do
+    argument :id, !types.ID do
       description 'ID of Shop'
     end
 
@@ -43,22 +55,35 @@ MUTATION_TYPE = GraphQL::ObjectType.define do
       description 'URL of the post.'
     end
 
-    argument :file, Types::Scalars::FileType do
-      description 'Image file.'
+    argument :image, types.String do
+      description 'Image file Base64.'
     end
 
-    resolve -> (_object, args, ctx) {
+    resolve ->(_object, args, ctx) {
       begin
-        data = args[:input]
-        puts "MUTATION ID: #{data[:shopId]}"
-        shop = ctx[:current_user].shops.find_by(id: data[:shopId])
+        shop = ctx[:current_user].shops.find_by(id: args[:id])
         shop.update!(
-            name: data[:name],
-            description: data[:description],
-            url: data[:url],
-            image: data[:file]
+          name: args[:name],
+          description: args[:description],
+          url: args[:url],
+          image: args[:image]
         )
         shop
+      rescue ActiveRecord::RecordInvalid => e
+        GraphQL::ExecutionError.new(e.record.errors.to_json)
+      end
+    }
+  end
+
+  # Delete
+  field :deleteShop, SHOP_TYPE do
+    description 'Delete existing Shop'
+
+    argument :id, !types.ID
+
+    resolve ->(_obj, args, ctx) {
+      begin
+        ctx[:current_user].shops.find_by_id(args[:id]).delete
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
