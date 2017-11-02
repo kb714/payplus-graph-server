@@ -15,12 +15,13 @@ class ShopImageUploader < CarrierWave::Uploader::Base
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
-  # def default_url(*args)
-  #   # For Rails 3.1+ asset pipeline compatibility:
-  #   # ActionController::Base.helpers.asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
-  #
-  #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
-  # end
+  def default_url(*args)
+    # For Rails 3.1+ asset pipeline compatibility:
+    # ActionController::Base.helpers.asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
+    local_path = "/images/fallback/"
+    default_name = "default_shop.jpg"
+    ActionController::Base.helpers.asset_url(local_path + [version_name, default_name].compact.join('_'))
+  end
 
   # Process files as they are uploaded:
   process resize_to_fit: [200, 200]

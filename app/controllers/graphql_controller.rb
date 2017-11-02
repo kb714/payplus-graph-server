@@ -20,6 +20,7 @@ class GraphqlController < ApplicationController
       # )
       # render json: result
       if params[:operations].present?
+        puts "EN OPERATIONS"
         # この部分で、必要となる query と variables を設定する
         operations = ensure_hash(params[:operations])
         puts "OPERATIONS #{operations["variables"]}"
@@ -29,10 +30,10 @@ class GraphqlController < ApplicationController
         }
         query     = operations[:query]
       else
+        puts "NORMAL"
         variables = ensure_hash(params[:variables])
         query     = params[:query]
       end
-      puts "VARIABLES: #{variables}"
       result = PAYPLUS_GRAPH_SERVER_SCHEMA.execute(query, variables: variables, context: context)
       render json: result
     else

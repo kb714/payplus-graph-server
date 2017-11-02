@@ -58,8 +58,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'graphiql-rails', group: :development
 gem 'graphql'
 # carierwave
-gem 'carrierwave'
 gem 'carrierwave-base64'
+gem 'carrierwave'
 gem 'mini_magick'
 
 # Devise for sessions manage
